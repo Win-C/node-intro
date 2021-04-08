@@ -42,25 +42,27 @@ async function writeOutput(path, content) {
 /** Function takes in path to get content and path to file to write to
  *  Note: outPathOrUndef may be undefined
  */
-async function catOrWebCat(path, outPathOrUndef){
-  let content = path.startsWith('http') 
+async function catOrWebCat(path, outPathOrUndef) {
+  let content = path.startsWith('http')
     ? await webCat(path)
     : await cat(path);
-  if (outPathOrUndef){
+  if (outPathOrUndef) {
     writeOutput(outPathOrUndef, content);
   } else {
     console.log(content);
   }
 }
 
-let path;
+const argv = process.argv;
+let argAdj = 0; // adjustment for argv index for start of paths
 let outPathOrUndef;
 
-if (process.argv[2] === '--out'){
-  outPathOrUndef = process.argv[3];
-  path = process.argv[4];
-} else {
-  path = process.argv[2];
-}
+if (argv[2] === '--out') {
+  argAdj = 2;
+  outPathOrUndef = argv[3];
+} 
 
-catOrWebCat(path, outPathOrUndef);
+for (let i = 2 + argAdj; i < argv.length; i++) {
+  let path = argv[i];
+  catOrWebCat(path, outPathOrUndef);
+}
