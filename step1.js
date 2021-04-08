@@ -1,7 +1,6 @@
 "use strict";
 
 const fsP = require("fs/promises");
-const path = `./${process.argv[2]}`;
 
 /** Function takes in one argument, path
  *  Read the file with that path, and
@@ -9,11 +8,11 @@ const path = `./${process.argv[2]}`;
 async function cat(path){
   try {
     let contents = await fsP.readFile(path, "utf8");
-    console.log("file contents", contents);
+    console.log(contents);
   } catch(err){
-    console.error(err);
+    console.error(`Error reading ${path}: ${err}`);
     process.exit(1);
   }
 }
 
-cat(path);
+cat(process.argv[2]);
